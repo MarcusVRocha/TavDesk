@@ -2,6 +2,7 @@ package com.marcusvrocha.TavDesk.controller;
 
 import com.marcusvrocha.TavDesk.model.Chamado;
 import com.marcusvrocha.TavDesk.service.ChamadoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,12 @@ public class ChamadoController {
     @GetMapping("/{id}")
     public Chamado listarChamadoPorId(@PathVariable Long id) {
         return chamadoService.listarPorId(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarChamado(@PathVariable Long id) {
+        chamadoService.deletarChamado(id);
     }
 
 }

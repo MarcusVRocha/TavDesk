@@ -33,4 +33,11 @@ public class ChamadoService {
                 .orElseThrow(() -> new ChamadoNaoEncontradoException(id));
     }
 
+    public void deletarChamado(Long id) {
+        if (!chamadoRepository.existsById(id)) {
+            throw new ChamadoNaoEncontradoException(id);
+        }
+        chamadoRepository.deleteById(id);
+    }
+
 }
