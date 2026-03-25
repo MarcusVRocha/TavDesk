@@ -1,6 +1,7 @@
 package com.marcusvrocha.TavDesk.service;
 
 import com.marcusvrocha.TavDesk.enums.StatusChamado;
+import com.marcusvrocha.TavDesk.exception.ChamadoNaoEncontradoException;
 import com.marcusvrocha.TavDesk.model.Chamado;
 import com.marcusvrocha.TavDesk.repository.ChamadoRepository;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class ChamadoService {
 
     public Chamado listarPorId(Long id) {
         return chamadoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Chamado não encontrado com id: " + id));
+                .orElseThrow(() -> new ChamadoNaoEncontradoException(id));
     }
 
 }
