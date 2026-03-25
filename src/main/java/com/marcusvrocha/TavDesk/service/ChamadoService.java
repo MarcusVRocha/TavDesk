@@ -27,4 +27,9 @@ public class ChamadoService {
         return chamadoRepository.findAll();
     }
 
+    public Chamado listarPorId(Long id) {
+        return chamadoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Chamado não encontrado com id: " + id));
+    }
+
 }
