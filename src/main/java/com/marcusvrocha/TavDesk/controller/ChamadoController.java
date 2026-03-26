@@ -1,5 +1,6 @@
 package com.marcusvrocha.TavDesk.controller;
 
+import com.marcusvrocha.TavDesk.enums.StatusChamado;
 import com.marcusvrocha.TavDesk.model.Chamado;
 import com.marcusvrocha.TavDesk.service.ChamadoService;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,14 @@ public class ChamadoController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarChamado(@PathVariable Long id) {
         chamadoService.deletarChamado(id);
+    }
+
+    @PatchMapping("/{id}/status")
+    public Chamado atualizarStatus(
+            @PathVariable Long id,
+            @RequestParam StatusChamado status) {
+
+        return chamadoService.atualizarStatus(id, status);
     }
 
 }

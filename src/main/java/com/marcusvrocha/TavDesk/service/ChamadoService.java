@@ -40,4 +40,10 @@ public class ChamadoService {
         chamadoRepository.deleteById(id);
     }
 
+    public Chamado atualizarStatus(Long id, StatusChamado novoStatus) {
+        Chamado chamado = listarPorId(id);
+        chamado.setStatus(novoStatus);
+        return chamadoRepository.save(chamado);
+    }
+
 }
