@@ -1,5 +1,7 @@
 package com.marcusvrocha.TavDesk.service;
 
+import com.marcusvrocha.TavDesk.dto.ChamadoRequestDTO;
+import com.marcusvrocha.TavDesk.dto.ChamadoResponseDTO;
 import com.marcusvrocha.TavDesk.enums.StatusChamado;
 import com.marcusvrocha.TavDesk.exception.ChamadoNaoEncontradoException;
 import com.marcusvrocha.TavDesk.model.Chamado;
@@ -18,32 +20,60 @@ public class ChamadoService {
         this.chamadoRepository = chamadoRepository;
     }
 
-    public Chamado criarChamado(Chamado chamado) {
+    public ChamadoResponseDTO criarChamado(ChamadoRequestDTO dto) {
+        Chamado chamado = new Chamado();
+
+        chamado.setTitulo(dto.getTitulo());
+        chamado.setDescricao(dto.getDescricao());
+        chamado.setPrioridade(dto.getPrioridade());
         chamado.setStatus(StatusChamado.ABERTO);
         chamado.setDataCriacao(LocalDateTime.now());
-        return chamadoRepository.save(chamado);
+
+        Chamado salvo = chamadoRepository.save(chamado);
+
+        return toResponseDTO(salvo);
     }
 
-    public List<Chamado> listarChamados() {
-        return chamadoRepository.findAll();
+    public List<ChamadoResponseDTO> listarChamados() {
+        return chamadoRepository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
-    public Chamado listarPorId(Long id) {
+    private Chamado buscarEntidadePorId(Long id) {
         return chamadoRepository.findById(id)
                 .orElseThrow(() -> new ChamadoNaoEncontradoException(id));
     }
 
+    public ChamadoResponseDTO listarPorId(Long id) {
+        Chamado chamado = buscarEntidadePorId(id);
+        return toResponseDTO(chamado);
+    }
+
     public void deletarChamado(Long id) {
-        if (!chamadoRepository.existsById(id)) {
-            throw new ChamadoNaoEncontradoException(id);
-        }
-        chamadoRepository.deleteById(id);
+        Chamado chamado = buscarEntidadePorId(id);
+        chamadoRepository.delete(chamado);
     }
 
-    public Chamado atualizarStatus(Long id, StatusChamado novoStatus) {
-        Chamado chamado = listarPorId(id);
+    public ChamadoResponseDTO atualizarStatus(Long id, StatusChamado novoStatus) {
+        Chamado chamado = buscarEntidadePorId(id);
         chamado.setStatus(novoStatus);
-        return chamadoRepository.save(chamado);
+
+        Chamado atualizado = chamadoRepository.save(chamado);
+        return toResponseDTO(atualizado);
     }
 
+    private ChamadoResponseDTO toResponseDTO(Chamado chamado) {
+        ChamadoResponseDTO dto = new ChamadoResponseDTO();
+
+        dto.setId(chamado.getId());
+        dto.setTitulo(chamado.getTitulo());
+        dto.setDescricao(chamado.getDescricao());
+        dto.setStatus(chamado.getStatus());
+        dto.setPrioridade(chamado.getPrioridade());
+        dto.setDataCriacao(chamado.getDataCriacao());
+
+        return dto;
+    }
 }

@@ -1,7 +1,8 @@
 package com.marcusvrocha.TavDesk.controller;
 
+import com.marcusvrocha.TavDesk.dto.ChamadoRequestDTO;
+import com.marcusvrocha.TavDesk.dto.ChamadoResponseDTO;
 import com.marcusvrocha.TavDesk.enums.StatusChamado;
-import com.marcusvrocha.TavDesk.model.Chamado;
 import com.marcusvrocha.TavDesk.service.ChamadoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +20,17 @@ public class ChamadoController {
     }
 
     @PostMapping
-    public Chamado criarChamado(@RequestBody Chamado chamado) {
-        return chamadoService.criarChamado(chamado);
+    public ChamadoResponseDTO criarChamado(@RequestBody ChamadoRequestDTO dto) {
+        return chamadoService.criarChamado(dto);
     }
 
     @GetMapping
-    public List<Chamado> listarChamados() {
+    public List<ChamadoResponseDTO> listarChamados() {
         return chamadoService.listarChamados();
     }
 
     @GetMapping("/{id}")
-    public Chamado listarChamadoPorId(@PathVariable Long id) {
+    public ChamadoResponseDTO listarPorId(@PathVariable Long id) {
         return chamadoService.listarPorId(id);
     }
 
@@ -40,7 +41,7 @@ public class ChamadoController {
     }
 
     @PatchMapping("/{id}/status")
-    public Chamado atualizarStatus(
+    public ChamadoResponseDTO atualizarStatus(
             @PathVariable Long id,
             @RequestParam StatusChamado status) {
 
