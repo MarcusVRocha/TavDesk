@@ -4,6 +4,7 @@ import com.marcusvrocha.TavDesk.dto.ChamadoRequestDTO;
 import com.marcusvrocha.TavDesk.dto.ChamadoResponseDTO;
 import com.marcusvrocha.TavDesk.enums.StatusChamado;
 import com.marcusvrocha.TavDesk.service.ChamadoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class ChamadoController {
     }
 
     @PostMapping
-    public ChamadoResponseDTO criarChamado(@RequestBody ChamadoRequestDTO dto) {
+    public ChamadoResponseDTO criarChamado(@RequestBody @Valid ChamadoRequestDTO dto) {
         return chamadoService.criarChamado(dto);
     }
 

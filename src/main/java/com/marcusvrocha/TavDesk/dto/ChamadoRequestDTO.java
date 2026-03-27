@@ -1,11 +1,20 @@
 package com.marcusvrocha.TavDesk.dto;
 
 import com.marcusvrocha.TavDesk.enums.Prioridade;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class ChamadoRequestDTO {
 
+    @NotBlank(message = "O título é obrigatório")
+    @Size(max = 150, message = "O título deve ter no máximo 150 caracteres")
     private String titulo;
+
+    @NotBlank(message = "A descrição é obrigatória")
     private String descricao;
+
+    @NotNull(message = "A prioridade é obrigatória")
     private Prioridade prioridade;
 
     public String getTitulo() {
