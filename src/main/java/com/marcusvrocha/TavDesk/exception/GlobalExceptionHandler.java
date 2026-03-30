@@ -40,4 +40,17 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(resposta);
     }
+
+    @ExceptionHandler(TransicaoStatusInvalidaException.class)
+    public ResponseEntity<Map<String, Object>> handleTransicaoStatusInvalidaException(
+            TransicaoStatusInvalidaException ex) {
+
+        Map<String, Object> erro = new HashMap<>();
+        erro.put("Data/Hora", LocalDateTime.now());
+        erro.put("Status:", 400);
+        erro.put("Erro!", "Bad Request.");
+        erro.put("Mensagem:", ex.getMessage());
+
+        return ResponseEntity.badRequest().body(erro);
+    }
 }
