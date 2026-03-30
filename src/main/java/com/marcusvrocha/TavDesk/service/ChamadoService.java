@@ -4,6 +4,7 @@ import com.marcusvrocha.TavDesk.dto.ChamadoRequestDTO;
 import com.marcusvrocha.TavDesk.dto.ChamadoResponseDTO;
 import com.marcusvrocha.TavDesk.enums.StatusChamado;
 import com.marcusvrocha.TavDesk.exception.ChamadoNaoEncontradoException;
+import com.marcusvrocha.TavDesk.exception.TransicaoStatusInvalidaException;
 import com.marcusvrocha.TavDesk.model.Chamado;
 import com.marcusvrocha.TavDesk.repository.ChamadoRepository;
 import org.springframework.stereotype.Service;
@@ -58,10 +59,26 @@ public class ChamadoService {
 
     public ChamadoResponseDTO atualizarStatus(Long id, StatusChamado novoStatus) {
         Chamado chamado = buscarEntidadePorId(id);
-        chamado.setStatus(novoStatus);
+        validarTransicaoStatus(chamado.getStatus(), novoStatus);
 
+        chamado.setStatus(novoStatus);
         Chamado atualizado = chamadoRepository.save(chamado);
         return toResponseDTO(atualizado);
+    }
+
+    private void validarTransicaoStatus(StatusChamado statusAtual, StatusChamado novoStatus) {
+        if (statusAtual == novoStatus) {
+            throw new TransicaoStatusInvalidaException(statusAtual, novoStatus);
+        }
+
+        boolean transicaoValida =
+                (statusAtual == StatusChamado.ABERTO && novoStatus == StatusChamado.EM_ANDAMENTO) ||
+                        (statusAtual == StatusChamado.ABERTO && novoStatus == StatusChamado.FECHADO) ||
+                        (statusAtual == StatusChamado.EM_ANDAMENTO && novoStatus == StatusChamado.FECHADO);
+
+        if (!transicaoValida) {
+            throw new TransicaoStatusInvalidaException(statusAtual, novoStatus);
+        }
     }
 
     private ChamadoResponseDTO toResponseDTO(Chamado chamado) {
