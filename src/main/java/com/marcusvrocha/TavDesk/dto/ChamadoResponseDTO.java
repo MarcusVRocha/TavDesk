@@ -13,6 +13,7 @@ public class ChamadoResponseDTO {
     private StatusChamado status;
     private Prioridade prioridade;
     private LocalDateTime dataCriacao;
+    private Long usuarioId;
 
     public Long getId() {
         return id;
@@ -60,5 +61,13 @@ public class ChamadoResponseDTO {
 
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
+    }
+
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }

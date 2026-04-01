@@ -17,6 +17,8 @@ public class ChamadoRequestDTO {
     @NotNull(message = "A prioridade é obrigatória")
     private Prioridade prioridade;
 
+    private Long usuarioId;
+
     public String getTitulo() {
         return titulo;
     }
@@ -39,5 +41,13 @@ public class ChamadoRequestDTO {
 
     public void setPrioridade(Prioridade prioridade) {
         this.prioridade = prioridade;
+    }
+
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }
