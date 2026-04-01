@@ -1,5 +1,6 @@
 package com.marcusvrocha.TavDesk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.marcusvrocha.TavDesk.enums.Prioridade;
 import com.marcusvrocha.TavDesk.enums.StatusChamado;
 import jakarta.persistence.*;
@@ -41,5 +42,10 @@ public class Chamado {
 
     @Column(name = "data_criacao", nullable = false)
     private LocalDateTime dataCriacao;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonIgnoreProperties("chamados")
+    private Usuarios usuario;
 
 }
