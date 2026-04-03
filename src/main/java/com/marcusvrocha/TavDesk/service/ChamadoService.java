@@ -6,7 +6,9 @@ import com.marcusvrocha.TavDesk.enums.StatusChamado;
 import com.marcusvrocha.TavDesk.exception.ChamadoNaoEncontradoException;
 import com.marcusvrocha.TavDesk.exception.TransicaoStatusInvalidaException;
 import com.marcusvrocha.TavDesk.model.Chamado;
+import com.marcusvrocha.TavDesk.model.Usuarios;
 import com.marcusvrocha.TavDesk.repository.ChamadoRepository;
+import com.marcusvrocha.TavDesk.repository.UsuariosRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,9 +18,11 @@ import java.util.List;
 public class ChamadoService {
 
     private final ChamadoRepository chamadoRepository;
+    private final UsuariosRepository usuariosRepository;
 
-    public ChamadoService(ChamadoRepository chamadoRepository) {
+    public ChamadoService(ChamadoRepository chamadoRepository, UsuariosRepository usuariosRepository) {
         this.chamadoRepository = chamadoRepository;
+        this.usuariosRepository = usuariosRepository;
     }
 
     public ChamadoResponseDTO criarChamado(ChamadoRequestDTO dto) {
@@ -29,6 +33,13 @@ public class ChamadoService {
         chamado.setPrioridade(dto.getPrioridade());
         chamado.setStatus(StatusChamado.ABERTO);
         chamado.setDataCriacao(LocalDateTime.now());
+
+        if (dto.getUsuarioId() != null) {
+            Usuarios usuario = usuariosRepository.findById(dto.getUsuarioId())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + dto.getUsuarioId()));
+
+            chamado.setUsuario(usuario);
+        }
 
         Chamado salvo = chamadoRepository.save(chamado);
 
@@ -90,6 +101,10 @@ public class ChamadoService {
         dto.setStatus(chamado.getStatus());
         dto.setPrioridade(chamado.getPrioridade());
         dto.setDataCriacao(chamado.getDataCriacao());
+
+        if (chamado.getUsuario() != null) {
+            dto.setUsuarioId(chamado.getUsuario().getId());
+        }
 
         return dto;
     }
