@@ -53,4 +53,28 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(erro);
     }
+
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    public ResponseEntity<Map<String, Object>> handleUsuarioNaoEncontradoException(UsuarioNaoEncontradoException ex){
+
+        Map<String, Object> erro = new HashMap<>();
+        erro.put("Data/Hora", LocalDateTime.now());
+        erro.put("Status:", 404);
+        erro.put("Erro!", "Não encontrado.");
+        erro.put("Mensagem:", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailJaCadastradoException(EmailJaCadastradoException ex){
+
+        Map<String, Object> erro = new HashMap<>();
+        erro.put("Data/Hora", LocalDateTime.now());
+        erro.put("Status:", 400);
+        erro.put("Erro!", "Bad Request.");
+        erro.put("Mensagem:", ex.getMessage());
+
+        return ResponseEntity.badRequest().body(erro);
+    }
 }
