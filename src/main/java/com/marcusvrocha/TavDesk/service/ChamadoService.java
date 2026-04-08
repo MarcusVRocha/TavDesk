@@ -5,6 +5,7 @@ import com.marcusvrocha.TavDesk.dto.ChamadoResponseDTO;
 import com.marcusvrocha.TavDesk.enums.StatusChamado;
 import com.marcusvrocha.TavDesk.exception.ChamadoNaoEncontradoException;
 import com.marcusvrocha.TavDesk.exception.TransicaoStatusInvalidaException;
+import com.marcusvrocha.TavDesk.exception.UsuarioNaoEncontradoException;
 import com.marcusvrocha.TavDesk.model.Chamado;
 import com.marcusvrocha.TavDesk.model.Usuarios;
 import com.marcusvrocha.TavDesk.repository.ChamadoRepository;
@@ -36,7 +37,7 @@ public class ChamadoService {
 
         if (dto.getUsuarioId() != null) {
             Usuarios usuario = usuariosRepository.findById(dto.getUsuarioId())
-                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + dto.getUsuarioId()));
+                    .orElseThrow(() -> new UsuarioNaoEncontradoException(dto.getUsuarioId()));
 
             chamado.setUsuario(usuario);
         }
